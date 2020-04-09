@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/hw-light.css" />
+    <link rel="stylesheet" href="css/layout/layout.css" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- Footer ------------------------------>
+        <div class="footer">
+          <div style="display: flex; justify-content: space-between;">
+            <div style="align-self: center;">
+              <h2 style="color: #5BB5C9;">
+                H+W Toolkit
+              </h2>
+            </div>
+            <div style="align-self: center;">
+              <img
+                src="resources/HW_Logo_with_slogan.svg"
+                width="181"
+                height="49"
+                style="margin-top: 5px; margin-left: 5px; margin-right: 5px;"
+              />
+              <img
+                src="resources/salesforce-partner.png"
+                width="126.2"
+                height="49"
+                style="margin-top: 5px; margin-left: 5px; margin-right: 5px;"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Sections ------------------------------>
+        <!-- Section - Toolkit --->
+        <section>
+          <!-- Sub-Section - Goals ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## H+W Toolkit
+                ### Motivation / Goals
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/toolkit-Keywords.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Overview ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## H+W Toolkit
+                ### Overview
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/toolkit-UML.svg"
+                    alt="UML"
+                    height="400"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TestDataGeneration - Challenge - Avoiding Code Duplicates --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## TestData Generation
+                ### Challenge - Avoiding Code Duplicates
+                </textarea>
+              </div>
+              <div>
+                <img src="resources/apexTestData-CodeDuplicates.svg" alt="" />
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## TestData Generation
+                ### Solution - Centralizing Test Record Generation
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+                ![Record Relations](resources/apexTestData-UML-H2.svg)
+                </textarea>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Example ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <h2>TestData Generation</h2>
+              <h3>
+                Example
+              </h3>
+              <pre>
+                <code class="hljs java">
+//Test Class 1
+testDataManager.createRecord(PartnerAccountTestRecordCreator.class);
+                </code>
+              </pre>
+              <pre>
+                <code class="hljs java">
+//Test Class 2
+testDataManager.createRecords(PartnerAccountTestRecordCreator.class, 2)
+.addFieldValue('Industry', 'Partner');
+                </code>
+              </pre>
+              <pre>
+                <code class="hljs java">
+//Test Record Creator
+global class PartnerAccountTestRecordCreator implements TestRecordCreator {
+  global SObject create(Integer currentRecordIdentifier) {
+    return new Account(
+      Name = 'PartnerAccount-' + currentRecordIdentifier,
+      RecordTypeId = hwc.RecordTypes.getRecordTypeId(Account.SObjectType, 'Partner')
+    );
+  }
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TestDataGeneration - Challenge - Minimizing Maintaining Effort --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## TestData Generation
+                ### Challenge - Minimizing Maintainance Effort
+                </textarea>
+              </div>
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template>
+                    ![Record Relations](resources/apexTestData-CodeDuplicates-ConfigurationChange.svg)
+                    <br/>
+                    *Configuration Change*
+                  </textarea>
+                </div>
+                <div data-markdown class="center-center transparent-image">
+                  <textarea data-template>
+                    ![Record Relations](resources/rightArrow.svg)
+                  </textarea>
+                </div>
+                <div data-markdown>
+                  <textarea data-template>
+                    ![Record Relations](resources/apexTestData-CodeDuplicates-Error.svg)
+                    <br/>
+                    *Broken Tests*
+                  </textarea>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## TestData Generation
+                ### Solution - Centralizing Test Record Generation
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+                ![Record Relations](resources/apexTestData-UML-H2.svg)
+                </textarea>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Example ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <h2>TestData Generation</h2>
+              <h3>
+                Example
+              </h3>
+              <pre>
+                <code class="hljs java">
+//Test Class 1
+testDataManager.createRecord(PartnerAccountTestRecordCreator.class);
+                </code>
+              </pre>
+              <pre>
+                <code class="hljs java">
+//Test Class 2
+testDataManager.createRecords(PartnerAccountTestRecordCreator.class, 2)
+.addFieldValue('Industry', 'Partner');
+                </code>
+              </pre>
+              <pre>
+                <code class="hljs java" data-line-numbers="8">
+//Test Record Creator
+global class PartnerAccountTestRecordCreator implements TestRecordCreator {
+  global SObject create(Integer currentRecordIdentifier) {
+    return new Account(
+      Name = 'PartnerAccount-' + currentRecordIdentifier,
+      RecordTypeId = hwc.RecordTypes.getRecordTypeId(Account.SObjectType, 'Partner'),
+      CustomerPriority__c = 'High'
+    );
+  }
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TestDataGeneration - Challenge -  Linking Records --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                  ## TestData Generation
+                  ### Challenge - Linking Records
+                  </textarea
+                >
+              </div>
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template>
+                    ![Record Relations](resources/apexTestData-Relations-1.svg)
+                </textarea
+                  >
+                </div>
+                <div data-markdown class="transparent-image">
+                  <textarea data-template>
+                    ![Record Relations](resources/rightArrow.svg)
+                </textarea
+                  >
+                </div>
+                <div data-markdown>
+                  <textarea data-template>
+                  ![Record Relations](resources/apexTestData-Relations-2.svg)
+                </textarea
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## TestData Generation
+                ### Solution - Automatic Dependency Resolving
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+                ![Record Relations](resources/apexTestData-UML-H1.svg)
+                </textarea>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Example ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div>
+                <h2>TestData Generation</h2>
+                <h3>
+                  Example
+                </h3>
+              </div>
+              <div>
+                <pre>
+                  <code class="hljs java">
+  //Adding Child Records
+  testDataManager.createRecord(AccountTestRecordCreator.class)
+   .addChildRecords(OpportunityTestRecordCreator.class, 'AccountId', 5)
+   .addChildRecords(OpportunityLineItemTestRecordCreator.class, 'OpportunityId', 10)
+                  </code>
+                </pre>
+              </div>
+              <div>
+                <pre>
+                  <code class="hljs java">
+  //Adding Parent Records
+  testDataManager.createRecord(ContactTestRecordCreator.class)
+   .addParentRecords(AccountTestRecordCreator.class, 'AccountId');
+                  </code>
+                </pre>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TestDataGeneration - Standard ------------------------------>
+        <section>
+          <!-- Sub-Section - Single Records ------------------------------>
+          <section>
+            <h2>TestData Generation - Standard</h2>
+            <h3>
+              Single Records
+            </h3>
+            <pre>
+            <code class="hljs java" data-line-numbers="1-55">
+ //Get Standard Pricebook
+ Id standardPriceBookId = Test.getStandardPricebookId();
+
+ //Create Custom Pricebook
+ Pricebook2 pricebookToInsert = new Pricebook2(
+   Name = 'Test Pricebook',
+   IsActive = true
+ );
+ insert (pricebookToInsert);
+
+ //Create Product
+ Product2 productToInsert = new Product2(Name = 'Test Product');
+ insert productToInsert;
+
+ //Create Standard PricebookEntry
+ PricebookEntry standardPriceBookEntryToInsert = new PricebookEntry(
+   Pricebook2Id = standardPriceBookId,
+   Product2Id = productToInsert.Id,
+   UnitPrice = 1.00,
+   IsActive = true
+ );
+ insert standardPriceBookEntryToInsert;
+
+ //Create Custom PricebookEntry
+ PricebookEntry priceBookEntryToInsert = new PricebookEntry(
+   Pricebook2Id = pricebookToInsert.Id,
+   Product2Id = productToInsert.Id,
+   UnitPrice = 5.00,
+   IsActive = true
+ );
+ insert priceBookEntryToInsert;
+
+ //Create Account
+ Account accountToInsert = new Account(name = 'Test Account');
+ insert accountToInsert;
+
+ //Create Opportunity
+ Opportunity opportunityToInsert = new Opportunity(
+   AccountId = accountToInsert.Id,
+   Pricebook2Id = pricebookToInsert.Id,
+   Name = 'Test Opportunity',
+   StageName = 'Decision',
+   CloseDate = Date.today().addDays(30)
+ );
+ insert opportunityToInsert;
+
+ //Create OpportunityLineItem
+ OpportunityLineItem opportunityLineItemToInsert = new OpportunityLineItem(
+   OpportunityId = opportunityToInsert.Id,
+   PricebookEntryId = priceBookEntryToInsert.Id,
+   Quantity = 5,
+   UnitPrice = priceBookEntryToInsert.UnitPrice
+ );
+ insert opportunityLineItemToInsert;
+					  </code>
+          </pre>
+          </section>
+          <!-- Sub-Section - Mass Data ------------------------------>
+          <section>
+            <h2>Test Data Generation - Standard</h2>
+            <h3>
+              Mass Data
+            </h3>
+            <pre>
+            <code class="hljs java" data-line-numbers="1-92">
+//Get Standard Pricebook
+Id standardPriceBookId = Test.getStandardPricebookId();
+
+//Create Custom Pricebook
+Pricebook2 pricebookToInsert = new Pricebook2(
+ Name = 'Test Pricebook',
+ IsActive = true
+);
+insert (pricebookToInsert);
+
+//Create 5 Accounts
+List&lt;Account&gt; accountsToInsert = new List&lt;Account&gt;();
+for (Integer i = 1; i &lt;= 5; i++) {
+ Account accountToInsert = new Account(Name = 'Test Account');
+ accountsToInsert.add(accountToInsert);
+}
+insert accountsToInsert;
+
+//Create 10 Opportunities
+List&lt;Opportunity&gt; opportunitiesToInsert = new List&lt;Opportunity&gt;();
+for (Account accountToInsert : accountsToInsert) {
+ for (Integer i = 1; i &lt;= 10; i++) {
+   Opportunity opportunityToInsert = new Opportunity(
+     AccountId = accountToInsert.Id,
+     Pricebook2Id = pricebookToInsert.Id,
+     Name = 'Test Opportunity',
+     StageName = 'Decision',
+     CloseDate = Date.today().addDays(30)
+   );
+   opportunitiesToInsert.add(opportunityToInsert);
+ }
+}
+insert opportunitiesToInsert;
+
+//Create 10 Products
+List&lt;Product2&gt; productsToInsert = new List&lt;Product2&gt;();
+for (Opportunity opportunityToInsert : opportunitiesToInsert) {
+ for (Integer i = 1; i &lt;= 10; i++) {
+   Product2 productToInsert = new Product2(Name = 'Test Product');
+   productsToInsert.add(productToInsert);
+ }
+}
+insert (productsToInsert);
+
+//Create 100 Standard Pricebook Entries
+List&lt;PricebookEntry&gt; standardPricebookEntriesToInsert = new List&lt;PricebookEntry&gt;();
+for (Product2 productToInsert : productsToInsert) {
+ for (Integer i = 1; i &lt;= 10; i++) {
+   PricebookEntry standardPriceBookEntryToInsert = new PricebookEntry(
+     Pricebook2Id = pricebookToInsert.Id,
+     Product2Id = productToInsert.Id,
+     UnitPrice = 5.00,
+     IsActive = true
+   );
+   standardPricebookEntriesToInsert.add(standardPriceBookEntryToInsert);
+ }
+}
+insert (standardPricebookEntriesToInsert);
+//Create 100 Custom Pricebook Entries
+List&lt;PricebookEntry&gt; pricebookEntriesToInsert = new List&lt;PricebookEntry&gt;();
+for (Product2 productToInsert : productsToInsert) {
+ for (Integer i = 1; i &lt;= 10; i++) {
+   PricebookEntry standardPriceBookEntryToInsert = new PricebookEntry(
+     Pricebook2Id = standardPriceBookId,
+     Product2Id = productToInsert.Id,
+     UnitPrice = 1.00,
+     IsActive = true
+   );
+   pricebookEntriesToInsert.add(standardPriceBookEntryToInsert);
+ }
+}
+insert (pricebookEntriesToInsert);
+
+//Create 10 Opportunity LineItems per Opportunity
+List&lt;OpportunityLineItem&gt; opportunityLineItemsToInsert = new List&lt;OpportunityLineItem&gt;();
+Integer counter = 1;
+for (Opportunity opportunityToInsert : opportunitiesToInsert) {
+ for (Integer i = 1; i &lt;= 10; i++) {
+   PricebookEntry pricebookEntry = pricebookEntriesToInsert.get(counter);
+   OpportunityLineItem opportunityLineItemToInsert = new OpportunityLineItem(
+     OpportunityId = opportunityToInsert.Id,
+     PricebookEntryId = pricebookEntry.Id,
+     Quantity = 5,
+     UnitPrice = pricebookEntry.UnitPrice
+   );
+   opportunityLineItemsToInsert.add(opportunityLineItemToInsert);
+   ++counter;
+ }
+}
+insert opportunityLineItemsToInsert;
+            </code>
+          </pre>
+          </section>
+        </section>
+
+        <!-- Section - TestDataGeneration - Toolkit ------------------------------>
+        <section>
+          <!-- Sub-Section - Single Record ------------------------------>
+          <section>
+            <h2>Test Data Generation - H+W Toolkit</h2>
+            <h3>
+              Single Records
+            </h3>
+            <pre>
+                <code class="hljs java" data-line-numbers="1-11">
+hwc.TestDataManager opportunityTestDataManager = new hwc.TestDataManager();
+opportunityTestDataManager.createRecord(AccountTestRecordCreator.class)
+ .addChildRecords(OpportunityTestRecordCreator.class, 'AccountId', 1)
+ .addChildRecords(OpportunityLineItemTestRecordCreator.class, 'OpportunityId', 1)
+ .addParentRecord(PricebookEntryTestRecordCreator.class, 'PricebookEntryId')
+ .addParentRecord(Pricebook2TestRecordCreator.class, 'Pricebook2Id')
+ .goBack()
+ .addParentRecord(Product2TestRecordCreator.class, 'Product2Id')
+ .addChildRecords(StandardPricebookEntryTestRecordCreator.class, 'Product2Id', 1);
+opportunityTestDataManager.save();
+                </code>
+              </pre>
+          </section>
+          <!-- Sub-Section - Mass Data ------------------------------>
+          <section>
+            <h2>Test Data Generation - H+W Toolkit</h2>
+            <h3>
+              Mass Data
+            </h3>
+            <pre>
+              <code class="hljs java" data-line-numbers="4,5,10">
+hwc.TestDataManager opportunityTestDataManager = new hwc.TestDataManager();
+opportunityTestDataManager.createRecord(AccountTestRecordCreator.class)
+ .addChildRecords(OpportunityTestRecordCreator.class, 'AccountId', 5)
+ .addChildRecords(OpportunityLineItemTestRecordCreator.class, 'OpportunityId', 10)
+ .addParentRecord(PricebookEntryTestRecordCreator.class, 'PricebookEntryId')
+ .addParentRecord(Pricebook2TestRecordCreator.class, 'Pricebook2Id')
+ .goBack()
+ .addParentRecord(Product2TestRecordCreator.class, 'Product2Id')
+ .addChildRecords(StandardPricebookEntryTestRecordCreator.class, 'Product2Id', 10);
+opportunityTestDataManager.save();
+              </code>
+            </pre>
+          </section>
+          <!-- Sub-Section - Recipes ------------------------------>
+          <section>
+            <h2>Test Data Generation - H+W Toolkit</h2>
+            <h3>
+              Recipes
+            </h3>
+            <pre>
+              <code class="hljs java">
+testRecordCreator.useRecipe(hwc.AccWithOppsAndLineItemsTestDataRecipe.class);
+              </code>
+            </pre>
+            <pre>
+              <code class="hljs java" data-line-numbers="1-14">
+global with sharing class AccWithOppsAndLineItemsTestDataRecipe implements TestDataRecipe {
+  global TestData create(TestDataManager testDataManager) {
+    return testDataManager
+      .createRecord(AccountTestRecordCreator.class)
+      .addChildRecords(OpportunityTestRecordCreator.class, 'AccountId', 5)
+      .addChildRecords(OpportunityLineItemTestRecordCreator.class, 'OpportunityId', 10)
+      .addParentRecord(PricebookEntryTestRecordCreator.class, 'PricebookEntryId')
+      .addParentRecord(Pricebook2TestRecordCreator.class, 'Pricebook2Id')
+      .goBack()
+      .addParentRecord(Product2TestRecordCreator.class, 'Product2Id')
+      .addChildRecords(StandardPricebookEntryTestRecordCreator.class, 'Product2Id', 1);
+  }
+}
+              </code>
+            </pre>
+          </section>
+          <!-- Sub-Section - Methods ------------------------------>
+          <section>
+            <h2>Test Data Generation - H+W Toolkit</h2>
+            <h3>
+              Methods
+            </h3>
+            <pre>
+              <code class="hljs" data-line-numbers="">
+//Create single Record
+TestData testData = TestDataManager.createRecord(TestRecordCreator.class);
+
+//Create n Records
+TestData testData = TestDataManager.createRecords(TestRecordCreator.class, n);
+
+//Add n Child Records
+TestData.addChildRecords(TestRecordCreator.class, 'ReferenceFieldName', n);
+
+//Add Parent Record
+TestData.addParentRecord(TestRecordCreator.class, 'ReferenceFieldName');
+
+//Add Field Value
+TestData.addFieldValue('Field Name', 'Field Value');
+
+//Go 1 Step back
+TestData.goBack();
+
+//Go n Steps back
+TestData.goBack(n);
+
+//Get first created Record(s)
+TestData.getFirstCreatedTestData();
+
+//Get SObject Record
+TestData.getRecord();
+
+//Get SObject Records
+TestData.getRecords();
+
+//Save Records
+TestDataManager.save();
+              </code>
+            </pre>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Execution Handling / Code Structuring --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Execution Handling / Execution Order
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Execution-Challenge-Order.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Handlers / Name-Based Execution
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Execution-1.svg"
+                    alt="UML"
+                    height="400"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Handlers / Name-Based Execution
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Execution-2.svg"
+                    alt="UML"
+                    height="400"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Handlers / Name-Based Execution
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Execution-3.svg"
+                    alt="UML"
+                    height="400"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Clean Code Structure --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Clean Code Structure
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <pre>
+                    <code class="hljs java">
+// Share an Account with every member of its Territory
+trigger ShareTerr on Account (after insert, before update) {
+
+  // Step 1: Create a set of all Zip Codes to evaluate
+  Set&lt;String&gt; zips = new Set&lt;String&gt;();
+  if (Trigger.isInsert) {
+    // For inserted Accounts, all Zip Codes are needed
+    for (Account a : Trigger.new) {
+      zips.add(a.BillingPostalCode);
+    }
+  } else if (Trigger.IsUpdate) {
+    // For updated Accounts, only evaluate changed Zip Codes
+    Set&lt;Id&gt; changedAccs = new Set&lt;Id&gt;();
+    for (Account a : Trigger.new) {
+      String oldZip = Trigger.oldMap.get(a.Id).BillingPostalCode;
+      String newZip = a.BillingPostalCode;
+      if (newZip != oldZip) {
+        zips.add(newZip);
+        changedAccs.add(a.Id);
+      }
+    }
+
+    // Step 1a: Delete sharing records from old Territories
+    List&lt;AccountShare&gt; shares = [SELECT Id FROM AccountShare
+                                  WHERE AccountId IN :changedAccs
+                                    AND RowCause = 'Manual'];
+    delete shares;
+  }
+
+  // Step 2: Find the matching Territories and Map them
+  Map&lt;String, Territory__c&gt; terrMap =
+    new Map&lt;String, Territory__c&gt;();
+  List&lt;Territory__c&gt; terrs = [SELECT Id, Zip_Code__c,
+                   (SELECT Id, User__c FROM Territory_Members__r)
+                                FROM Territory__c
+                                WHERE Zip_Code__c IN :zips];
+  for (Territory__c terr : terrs) {
+    terrMap.put(terr.Zip_Code__c, terr);
+  }
+
+  // Step 3: Create AccountShares for all Territory Members
+  List&lt;AccountShare&gt; shares = new List&lt;AccountShare&gt;();
+  for (Account a : Trigger.new) {
+    Territory__c terr = terrMap.get(a.BillingPostalCode);
+    if (terr != null) {
+      for (Territory_Member__c tm : terr.Territory_Members__r) {
+        // We won't create one if they're already the owner
+        if (tm.User__c != a.OwnerId) {
+          AccountShare aShare           = new AccountShare();
+          aShare.AccountId              = a.Id;
+          aShare.UserOrGroupId          = tm.User__c;
+          aShare.AccountAccessLevel     = 'Edit';
+          aShare.OpportunityAccessLevel = 'Edit';
+          shares.add(aShare);
+        }
+      }
+    }
+  }
+  insert shares;
+}
+                    </code>
+                  </pre>
+                </div>
+                <div>
+                  <pre>
+                    <code class="hljs java">
+trigger AddRelatedRecord on Account(after insert, after update) {
+    List&lt;Opportunity&gt; oppList = new List&lt;Opportunity&gt;();
+
+    // Get the related opportunities for the accounts in this trigger
+    Map&lt;Id,Account&gt; acctsWithOpps = new Map&lt;Id,Account&gt;(
+        [SELECT Id,(SELECT Id FROM Opportunities) FROM Account WHERE Id IN :Trigger.New]);
+
+    // Add an opportunity for each account if it doesn't already have one.
+    // Iterate through each account.
+    for(Account a : Trigger.New) {
+        System.debug('acctsWithOpps.get(a.Id).Opportunities.size()=' + acctsWithOpps.get(a.Id).Opportunities.size());
+        // Check if the account already has a related opportunity.
+        if (acctsWithOpps.get(a.Id).Opportunities.size() == 0) {
+            // If it doesn't, add a default opportunity
+            oppList.add(new Opportunity(Name=a.Name + ' Opportunity',
+                                       StageName='Prospecting',
+                                       CloseDate=System.today().addMonths(1),
+                                       AccountId=a.Id));
+        }
+    }
+    if (oppList.size() &gt; 0) {
+        insert oppList;
+    }
+}
+                    </code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Predefined Interface
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <pre>
+                    <code class="hljs java" data-line-numbers="">
+public interface TriggerHandler {
+  void prepareProcessing();
+
+  void prepareProcessingAgain();
+
+  void processRecord(SObject oldRecord, SObject newRecord);
+
+  void processRecordAgain(SObject oldRecord, SObject newRecord);
+
+  void finishProcessing();
+
+  void finishProcessingAgain();
+
+  void doDML();
+}
+                    </code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Example ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Example
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <pre>
+                    <code lang="java">
+//Trigger
+trigger AccountTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+  hwc.TriggerDispatcher.runAll('Account');
+}
+                    </code>
+                  </pre>
+                </div>
+                <div>
+                  <pre>
+                    <code lang="java">
+//Trigger Handler
+global with sharing class AccountAfterUpdate_1_CreateContactsOpps extends hwc.TriggerHandlerBase {
+  global override void prepareProcessing() {
+    getDetailedLogger().startBlock('Create Contacts &amp; Opportunities with roles', '');
+  }
+
+  global override void prepareProcessingAgain() {
+  }
+
+  global override void processRecord(SObject oldRecord, SObject newRecord) {
+    Contact contactToInsert = createContactWithRole((Account) newRecord);
+    createOpportunityWithRole((Account) newRecord, contactToInsert);
+  }
+
+  global override void processRecordAgain(SObject oldRecord, SObject newRecord) {
+  }
+
+  global override void finishProcessing() {
+    getDetailedLogger().endBlock('Create Contacts &amp; Opportunities with roles', '');
+  }
+
+  global override void finishProcessingAgain() {
+  }
+
+  private Contact createContactWithRole(Account account) {
+    Contact contactToInsert = new Contact(AccountId = account.Id, LastName = 'Test-Contact-1');
+    AccountContactRole accountContactRoleToInsert = new AccountContactRole(AccountId = account.Id);
+    this.recordsToSave.addRecord(accountContactRoleToInsert).addParentRecord(contactToInsert, 'ContactId');
+    return contactToInsert;
+  }
+
+  private void createOpportunityWithRole(Account account, Contact contact) {
+    Opportunity opportunityToInsert = new Opportunity(
+      AccountId = account.Id,
+      Name = 'Test-Opportunity-1',
+      StageName = 'Prospecting',
+      CloseDate = Date.today()
+    );
+    OpportunityContactRole opportunityContactRoleToInsert = new OpportunityContactRole();
+    hwc.RecordLinker.LinkedRecord opportunityContactRoleLinkedRecord = this.recordsToSave.addRecord(
+      opportunityContactRoleToInsert
+    );
+    opportunityContactRoleLinkedRecord.addParentRecord(opportunityToInsert, 'OpportunityId');
+    opportunityContactRoleLinkedRecord.addParentRecord(contact, 'ContactId');
+  }
+}
+                    </code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Recursion Control --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Recursion Control
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Recursion-Challenge.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Recursion Detection
+                </textarea>
+              </div>
+              <div>
+                <pre>
+                    <code class="hljs java" data-line-numbers="5,9,13">
+public interface TriggerHandler {
+  void prepareProcessing();
+
+  void prepareProcessingAgain();
+
+  void processRecord(SObject oldRecord, SObject newRecord);
+
+  void processRecordAgain(SObject oldRecord, SObject newRecord);
+
+  void finishProcessing();
+
+  void finishProcessingAgain();
+
+  void doDML();
+}
+                    </code>
+                  </pre>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Orchestration --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Orchestration
+                </textarea>
+              </div>
+              <div>
+                <pre>
+                  <code lang="java">
+trigger AccountTrigger on Account(after insert, after update) {
+  if (UserInfo.getProfileId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserRoleId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserRoleId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getProfileId() == '123456789012345') {
+    //Execute Logic
+  }
+}
+                  </code>
+                  </pre>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Handler Prefix Assignments
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Orchestration-Solution.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - DML Handling --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - DML Handling
+                </textarea>
+              </div>
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template> </textarea>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Central DML Handling
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-ExecutionContext.svg"
+                    alt="UML"
+                    height="400"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Logging --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Logging
+                </textarea>
+              </div>
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template>
+                  - Confusing Debug Logs
+                  - Hard to find
+                  - ...
+                </textarea
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Logging Framework
+                </textarea>
+              </div>
+              <div class="columns">
+                <div></div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - RecordMassProcessor --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Batch Job
+                ### Challenge - Execution Handling / Processing / Logging
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+
+                </textarea>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## LWC State Handling
+                ### Solution - Record Mass Processor
+                </textarea>
+              </div>
+              <div>
+                <img src="resources/recordMassProcessor-Solution.png" alt="" height="350"/>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - LWC ApplicationState --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## LWC State Handling
+                ### Challenge - Keeping track of the State
+                </textarea>
+              </div>
+              <div>
+                <img src="resources/applicationState-Challenge.png" alt="" height="300"/>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## LWC State Handling
+                ### Solution - Centralized Application State Handling
+                </textarea>
+              </div>
+              <div>
+                <img src="resources/applicationState-Solution.png" alt="" width="500"/>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        slideNumber: true,
+        hash: true,
+        transition: "convex", // none/fade/slide/convex/concave/zoom
+        dependencies: [
+          { src: "plugin/markdown/marked.js" },
+          { src: "plugin/markdown/markdown.js" },
+          { src: "plugin/highlight/highlight.js" },
+          { src: "plugin/zoom-js/zoom.js", async: true },
+          { src: "plugin/notes/notes.js", async: true }
+        ]
+      });
+    </script>
+  </body>
+</html>
