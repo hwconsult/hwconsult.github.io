@@ -834,7 +834,7 @@ trigger AddRelatedRecord on Account(after insert, after update) {
               <div class="columns">
                 <div>
                   <pre>
-                    <code class="hljs java" data-line-numbers="">
+                    <code class="hljs java" data-line-numbers="3,7,11">
 public interface TriggerHandler {
   void prepareProcessing();
 
@@ -856,6 +856,201 @@ public interface TriggerHandler {
               </div>
             </div>
           </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Recursion Control --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Recursion Control
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Recursion-Challenge.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Recursion Detection
+                </textarea>
+              </div>
+              <div>
+                <pre>
+                    <code class="hljs java" data-line-numbers="5,9,13">
+public interface TriggerHandler {
+  void prepareProcessing();
+
+  void prepareProcessingAgain();
+
+  void processRecord(SObject oldRecord, SObject newRecord);
+
+  void processRecordAgain(SObject oldRecord, SObject newRecord);
+
+  void finishProcessing();
+
+  void finishProcessingAgain();
+
+  void doDML();
+}
+                    </code>
+                  </pre>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - DML Handling --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - DML Handling
+                </textarea>
+              </div>
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template> </textarea>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Central DML Handling
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-ExecutionContext.svg"
+                    alt="UML"
+                    height="400"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Orchestration --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Orchestration
+                </textarea>
+              </div>
+              <div>
+                <pre>
+                  <code lang="java">
+trigger AccountTrigger on Account(after insert, after update) {
+  if (UserInfo.getProfileId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserRoleId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserRoleId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getProfileId() == '123456789012345') {
+    //Execute Logic
+  }
+}
+                  </code>
+                  </pre>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Handler Prefix Assignments
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Orchestration-Solution.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Logging --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Logging
+                </textarea>
+              </div>
+              <div class="columns">
+                <div data-markdown>
+                  <textarea data-template>
+                  - Confusing Debug Logs
+                  - Hard to find
+                  - ...
+                </textarea
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Logging Framework
+                </textarea>
+              </div>
+              <div class="columns">
+                <div></div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDipatcher - Example-->
+        <section>
           <!-- Sub-Section - Example ------------------------------>
           <section>
             <div class="content-with-header">
@@ -933,198 +1128,7 @@ global with sharing class AccountAfterUpdate_1_CreateContactsOpps extends hwc.Tr
           </section>
         </section>
 
-        <!-- Section - TriggerDispatcher - Challenge - Recursion Control --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Challenge - Recursion Control
-                </textarea>
-              </div>
-              <div class="columns">
-                <div>
-                  <img
-                    src="resources/triggerDispatcher-Recursion-Challenge.svg"
-                    alt="UML"
-                    height="300"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Solution - Recursion Detection
-                </textarea>
-              </div>
-              <div>
-                <pre>
-                    <code class="hljs java" data-line-numbers="5,9,13">
-public interface TriggerHandler {
-  void prepareProcessing();
-
-  void prepareProcessingAgain();
-
-  void processRecord(SObject oldRecord, SObject newRecord);
-
-  void processRecordAgain(SObject oldRecord, SObject newRecord);
-
-  void finishProcessing();
-
-  void finishProcessingAgain();
-
-  void doDML();
-}
-                    </code>
-                  </pre>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - Orchestration --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Challenge - Orchestration
-                </textarea>
-              </div>
-              <div>
-                <pre>
-                  <code lang="java">
-trigger AccountTrigger on Account(after insert, after update) {
-  if (UserInfo.getProfileId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserRoleId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserRoleId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getProfileId() == '123456789012345') {
-    //Execute Logic
-  }
-}
-                  </code>
-                  </pre>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Solution - Handler Prefix Assignments
-                </textarea>
-              </div>
-              <div class="columns">
-                <div>
-                  <img
-                    src="resources/triggerDispatcher-Orchestration-Solution.svg"
-                    alt="UML"
-                    height="300"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - DML Handling --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Challenge - DML Handling
-                </textarea>
-              </div>
-              <div class="columns">
-                <div data-markdown>
-                  <textarea data-template> </textarea>
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Solution - Central DML Handling
-                </textarea>
-              </div>
-              <div class="columns">
-                <div>
-                  <img
-                    src="resources/triggerDispatcher-ExecutionContext.svg"
-                    alt="UML"
-                    height="400"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - Logging --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Challenge - Logging
-                </textarea>
-              </div>
-              <div class="columns">
-                <div data-markdown>
-                  <textarea data-template>
-                  - Confusing Debug Logs
-                  - Hard to find
-                  - ...
-                </textarea
-                  >
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Solution - Dedicated Logging Framework
-                </textarea>
-              </div>
-              <div class="columns">
-                <div></div>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - RecordMassProcessor --->
+        <!-- Section - RecordMassProcessor - Challenge - RecordMassProcessor --->
         <section>
           <!-- Sub-Section - Challenge ------------------------------>
           <section>
@@ -1147,7 +1151,7 @@ trigger AccountTrigger on Account(after insert, after update) {
             <div class="content-with-header">
               <div data-markdown>
                 <textarea data-template>
-                ## LWC State Handling
+                ## Batch Job
                 ### Solution - Record Mass Processor
                 </textarea>
               </div>
