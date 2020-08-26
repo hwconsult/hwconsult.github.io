@@ -118,61 +118,6 @@
               </div>
             </div>
           </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## TestData Generation
-                ### Solution - Centralizing Test Record Generation
-                </textarea>
-              </div>
-              <div data-markdown>
-                <textarea data-template>
-                ![Record Relations](resources/apexTestData-UML-H2.svg)
-                </textarea>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Example ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <h2>TestData Generation</h2>
-              <h3>
-                Example
-              </h3>
-              <pre>
-                <code class="hljs java">
-//Test Class 1
-testDataManager.createRecord(PartnerAccountTestRecordCreator.class);
-                </code>
-              </pre>
-              <pre>
-                <code class="hljs java">
-//Test Class 2
-testDataManager.createRecords(PartnerAccountTestRecordCreator.class, 2)
-.addFieldValue('Industry', 'Partner');
-                </code>
-              </pre>
-              <pre>
-                <code class="hljs java">
-//Test Record Creator
-global class PartnerAccountTestRecordCreator implements TestRecordCreator {
-  global SObject create(Integer currentRecordIdentifier) {
-    return new Account(
-      Name = 'PartnerAccount-' + currentRecordIdentifier,
-      RecordTypeId = hwc.RecordTypes.getRecordTypeId(Account.SObjectType, 'Partner')
-    );
-  }
-}
-                </code>
-              </pre>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TestDataGeneration - Challenge - Minimizing Maintaining Effort --->
-        <section>
           <!-- Sub-Section - Challenge ------------------------------>
           <section>
             <div class="content-with-header">
@@ -226,7 +171,42 @@ global class PartnerAccountTestRecordCreator implements TestRecordCreator {
             <div class="content-with-header">
               <h2>TestData Generation</h2>
               <h3>
-                Example
+                Example - Avoiding Code Duplicates
+              </h3>
+              <pre>
+                <code class="hljs java">
+//Test Class 1
+testDataManager.createRecord(PartnerAccountTestRecordCreator.class);
+                </code>
+              </pre>
+              <pre>
+                <code class="hljs java">
+//Test Class 2
+testDataManager.createRecords(PartnerAccountTestRecordCreator.class, 2)
+.addFieldValue('Industry', 'Partner');
+                </code>
+              </pre>
+              <pre>
+                <code class="hljs java">
+//Test Record Creator
+global class PartnerAccountTestRecordCreator implements TestRecordCreator {
+  global SObject create(Integer currentRecordIdentifier) {
+    return new Account(
+      Name = 'PartnerAccount-' + currentRecordIdentifier,
+      RecordTypeId = hwc.RecordTypes.getRecordTypeId(Account.SObjectType, 'Partner')
+    );
+  }
+}
+                </code>
+              </pre>
+            </div>
+          </section>
+          <!-- Sub-Section - Example ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <h2>TestData Generation</h2>
+              <h3>
+                Example - Minimizing Maintainance Effort
               </h3>
               <pre>
                 <code class="hljs java">
@@ -927,7 +907,13 @@ public interface TriggerHandler {
               </div>
               <div class="columns">
                 <div data-markdown>
-                  <textarea data-template> </textarea>
+                  <textarea data-template>
+                    - Ho to relate records to each other?
+                    - When to save/delete records?
+                      - In single handlers?
+                      - In bulk for several handlers?
+                    - How to disable handlers?
+                  </textarea>
                 </div>
               </div>
             </div>
@@ -949,101 +935,6 @@ public interface TriggerHandler {
                     height="400"
                   />
                 </div>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - Orchestration --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Challenge - Orchestration
-                </textarea>
-              </div>
-              <div>
-                <pre>
-                  <code lang="java">
-trigger AccountTrigger on Account(after insert, after update) {
-  if (UserInfo.getProfileId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserRoleId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getUserRoleId() == '123456789012345') {
-    //Execute Logic
-  } else if (UserInfo.getProfileId() == '123456789012345') {
-    //Execute Logic
-  }
-}
-                  </code>
-                  </pre>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Solution - Handler Prefix Assignments
-                </textarea>
-              </div>
-              <div class="columns">
-                <div>
-                  <img
-                    src="resources/triggerDispatcher-Orchestration-Solution.svg"
-                    alt="UML"
-                    height="300"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - Logging --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Challenge - Logging
-                </textarea>
-              </div>
-              <div class="columns">
-                <div data-markdown>
-                  <textarea data-template>
-                  - Confusing Debug Logs
-                  - Hard to find
-                  - ...
-                </textarea
-                  >
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- Sub-Section - Solution ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## Trigger Execution
-                ### Solution - Dedicated Logging Framework
-                </textarea>
-              </div>
-              <div class="columns">
-                <div></div>
               </div>
             </div>
           </section>
@@ -1128,6 +1019,157 @@ global with sharing class AccountAfterUpdate_1_CreateContactsOpps extends hwc.Tr
           </section>
         </section>
 
+        <!-- Section - TriggerDispatcher - Challenge - Orchestration --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Orchestration
+                </textarea>
+              </div>
+              <div>
+                <pre>
+                  <code lang="java">
+trigger AccountTrigger on Account(after insert, after update) {
+  if (UserInfo.getProfileId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserRoleId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getUserRoleId() == '123456789012345') {
+    //Execute Logic
+  } else if (UserInfo.getProfileId() == '123456789012345') {
+    //Execute Logic
+  }
+}
+                  </code>
+                  </pre>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Handler Prefix Assignments
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Orchestration-Solution.svg"
+                    alt="UML"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - TriggerDispatcher - Challenge - Logging --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Logging - How to find
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Logging-Issue-1.png"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Challenge - Logging - Confusing
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Logging-Issue-2.png"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Logging Framework
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Logging-Solution-1.png"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Logging Framework
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Logging-Solution-2.png"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Trigger Execution
+                ### Solution - Dedicated Logging Framework
+                </textarea>
+              </div>
+              <div class="columns">
+                <div>
+                  <img
+                    src="resources/triggerDispatcher-Logging-Solution-3.png"
+                    height="300"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
         <!-- Section - RecordMassProcessor - Challenge - RecordMassProcessor --->
         <section>
           <!-- Sub-Section - Challenge ------------------------------>
@@ -1136,12 +1178,149 @@ global with sharing class AccountAfterUpdate_1_CreateContactsOpps extends hwc.Tr
               <div data-markdown>
                 <textarea data-template>
                 ## Batch Job
-                ### Challenge - Execution Handling / Processing / Logging
+                ### Challenge - Execution Handling
                 </textarea>
               </div>
               <div data-markdown>
                 <textarea data-template>
+                  - How to chain BatchJobs?
+                  - How to execute Batch Jobs based on Fiscal Periods, Soccer Seasons, ...?
+                </textarea>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Batch Job
+                ### Solution - Record Mass Processor Execution HAndling
+                </textarea>
+              </div>
+              <div>
+                <img src="resources/recordMassProcessor-Solution-1.png" alt="" height="350"/>
+              </div>
+            </div>
+          </section>
+        </section>
 
+        <!-- Section - RecordMassProcessor - Challenge - RecordMassProcessor --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Batch Job
+                ### Challenge - Processing
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+                  - How to configure data selection, batch size, logic?
+                  - How to centralize and reuse Batch Job logic?
+                </textarea>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Batch Job
+                ### Solution - Record Mass Processor Configuration
+                </textarea>
+              </div>
+              <div>
+                <img src="resources/recordMassProcessor-Solution-2.png" alt=""/>
+              </div>
+            </div>
+          </section>
+          <!-- Sub-Section - Solution ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Batch Job
+                ### Solution - Record Mass Processor Logic
+                </textarea>
+              </div>
+              <div>
+                <pre>
+                  <code lang="java">
+global with sharing class RecordDeletionProcessor implements RecordProcessor {
+  private Integer numberOfDeletedRecords;
+  private Integer numberOfDeletionErrors;
+  private List&lt;hwc.RecordProcessorError&gt; recordProcessorErrors;
+
+  global RecordDeletionProcessor() {
+    numberOfDeletedRecords = 0;
+    numberOfDeletionErrors = 0;
+    recordProcessorErrors = new List&lt;hwc.RecordProcessorError&gt;();
+  }
+
+  global String getName() {
+    return 'Deletion';
+  }
+
+  global void processRecords(List&lt;SObject&gt; recordsToProcess) {
+    List&lt;Database.DeleteResult&gt; deleteResults = Database.delete(recordsToProcess, false);
+    Integer i = 0;
+    for (Database.DeleteResult deleteResult : deleteResults) {
+      if (deleteResult.isSuccess()) {
+        this.numberOfDeletedRecords++;
+      } else {
+        this.numberOfDeletionErrors++;
+        List&lt;Database.Error&gt; databaseErrors = deleteResult.getErrors();
+        for (Database.Error databaseError : databaseErrors) {
+          SObject failedRecord = recordsToProcess.get(i);
+          RecordProcessorError recordProcessorError = hwc.RecordProcessorError.fromDatabaseError(
+            databaseError
+          );
+          recordProcessorError.setType(hwc.RecordProcessorError.DmlType.DELETERECORD);
+          recordProcessorError.setId(failedRecord.Id);
+          this.recordProcessorErrors.add(recordProcessorError);
+        }
+      }
+      i++;
+    }
+  }
+
+  global Integer getNumberOfProcessedRecords() {
+    return this.numberOfDeletedRecords;
+  }
+
+  global Integer getNumberOfProcessingErrors() {
+    return this.numberOfDeletionErrors;
+  }
+
+  global List&lt;hwc.RecordProcessorError&gt; getErrors() {
+    return this.recordProcessorErrors;
+  }
+}
+                  </code>
+                  </pre>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Section - RecordMassProcessor - Challenge - RecordMassProcessor --->
+        <section>
+          <!-- Sub-Section - Challenge ------------------------------>
+          <section>
+            <div class="content-with-header">
+              <div data-markdown>
+                <textarea data-template>
+                ## Batch Job
+                ### Challenge - Logging
+                </textarea>
+              </div>
+              <div data-markdown>
+                <textarea data-template>
+                  - How to log Batch Jobs?
                 </textarea>
               </div>
             </div>
@@ -1156,25 +1335,7 @@ global with sharing class AccountAfterUpdate_1_CreateContactsOpps extends hwc.Tr
                 </textarea>
               </div>
               <div>
-                <img src="resources/recordMassProcessor-Solution.png" alt="" height="350"/>
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <!-- Section - TriggerDispatcher - Challenge - LWC ApplicationState --->
-        <section>
-          <!-- Sub-Section - Challenge ------------------------------>
-          <section>
-            <div class="content-with-header">
-              <div data-markdown>
-                <textarea data-template>
-                ## LWC State Handling
-                ### Challenge - Keeping track of the State
-                </textarea>
-              </div>
-              <div>
-                <img src="resources/applicationState-Challenge.png" alt="" height="300"/>
+                <img src="resources/recordMassProcessor-Solution-3.1.png" alt=""/>
               </div>
             </div>
           </section>
@@ -1183,16 +1344,17 @@ global with sharing class AccountAfterUpdate_1_CreateContactsOpps extends hwc.Tr
             <div class="content-with-header">
               <div data-markdown>
                 <textarea data-template>
-                ## LWC State Handling
-                ### Solution - Centralized Application State Handling
+                ## Batch Job
+                ### Solution - Record Mass Processor
                 </textarea>
               </div>
               <div>
-                <img src="resources/applicationState-Solution.png" alt="" width="500"/>
+                <img src="resources/recordMassProcessor-Solution-3.2.png" alt=""/>
               </div>
             </div>
           </section>
         </section>
+
       </div>
     </div>
 
